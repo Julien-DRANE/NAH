@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évaluation Prix "Non au Harcèlement"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2C5F8D;
+            --primary-dark: #1a3d5c;
+            --accent: #E67E22;
+            --accent-light: #F39C12;
+            --success: #27AE60;
+            --danger: #E74C3C;
+            --bg: #F8F9FA;
+            --card: #FFFFFF;
+            --text: #2C3E50;
+            --text-light: #7F8C8D;
+            --border: #E0E6ED;
+            --shadow: rgba(44, 95, 141, 0.08);
+            --shadow-lg: rgba(44, 95, 141, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        header h1 {
+            font-family: 'Lora', serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--shadow-lg);
+        }
+
+        .card h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .project-item {
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-item:hover {
+            background: #e8ecf1;
+            border-left-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .project-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-left-color: var(--accent-light);
+        }
+
+        .project-score {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--accent);
+        }
+
+        .project-item.active .project-score {
+            color: var(--accent-light);
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            font-family: 'Lora', serif;
+            color: var(--primary);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e8ecf1;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-top: 4px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+
+        .score-input-group {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .score-input-group:hover {
+            background: #e8ecf1;
+            transform: translateX(5px);
+        }
+
+        .score-input-group label {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .score-input-group input[type="number"] {
+            width: 100px;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-align: center;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .score-input-group input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 95, 141, 0.1);
+        }
+
+        .total-score {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: 700;
+            margin-top: 20px;
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.3);
+        }
+
+        .total-score small {
+            display: block;
+            font-size: 0.5em;
+            opacity: 0.9;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 95, 141, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+        .ranking-section {
+            margin-top: 30px;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .ranking-table thead th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .ranking-table thead th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .ranking-table thead th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .ranking-table tbody tr {
+            background: white;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .ranking-table tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--shadow-lg);
+        }
+
+        .ranking-table tbody td {
+            padding: 15px;
+        }
+
+        .ranking-table tbody tr td:first-child {
+            border-radius: 10px 0 0 10px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2em;
+        }
+
+        .ranking-table tbody tr td:last-child {
+            border-radius: 0 10px 10px 0;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.1em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content h2 {
+            font-family: 'Lora', serif;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-conforme {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+
+        .status-non-conforme {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .observations-field {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .sidebar, .btn, .export-buttons {
+                display: none;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid var(--border);
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Prix "Non au Harcèlement"</h1>
+            <p>Système de gestion et d'évaluation des projets</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="card">
+                    <h2>Projets</h2>
+                    <button class="btn btn-primary btn-full" onclick="openNewProjectModal()">
+                        ➕ Nouveau Projet
+                    </button>
+                    <div id="projectList" class="project-list"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Actions</h2>
+                    <button class="btn btn-success btn-full" onclick="saveProject()">
+                        💾 Enregistrer
+                    </button>
+                    <button class="btn btn-accent btn-full" onclick="exportData()">
+                        📊 Exporter Excel
+                    </button>
+                    <button class="btn btn-primary btn-full" onclick="window.print()">
+                        🖨️ Imprimer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Form -->
+            <div class="card">
+                <div id="noProjectMessage" style="text-align: center; padding: 60px 20px; color: var(--text-light);">
+                    <h2 style="color: var(--primary); margin-bottom: 15px;">Aucun projet sélectionné</h2>
+                    <p>Créez un nouveau projet pour commencer l'évaluation</p>
+                </div>
+
+                <div id="evaluationForm" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <div>
+                            <h2 style="margin: 0; color: var(--primary); font-family: 'Lora', serif;">
+                                <span id="currentProjectName"></span>
+                            </h2>
+                            <p style="color: var(--text-light); margin-top: 5px;">
+                                <span id="currentProjectCategory"></span> • 
+                                <span id="currentProjectSupport"></span>
+                            </p>
+                        </div>
+                        <span id="conformityBadge" class="status-badge"></span>
+                    </div>
+
+                    <!-- A. CONFORMITÉ RÉGLEMENTAIRE -->
+                    <div class="form-section">
+                        <h3>A. CONFORMITÉ RÉGLEMENTAIRE (ÉLIMINATOIRE)</h3>
+                        <p style="color: var(--text-light); margin-bottom: 20px; font-style: italic;">
+                            Si un seul critère obligatoire est absent → production non recevable
+                        </p>
+                        
+                        <div class="checkbox-grid" id="conformityChecks"></div>
+                    </div>
+
+                    <!-- B. GRILLE DE NOTATION -->
+                    <div class="form-section">
+                        <h3>B. GRILLE DE NOTATION QUALITATIVE (SUR 100)</h3>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: var(--primary); margin-bottom: 15px;">1️⃣ Pertinence du message (/25)</h4>
+                            <div id="scoresPertinence"></div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: var(--primary); margin-bottom: 15px;">2️⃣ Impact émotionnel et pédagogique (/20)</h4>
+                            <div id="scoresImpact"></div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: var(--primary); margin-bottom: 15px;">3️⃣ Qualité de réalisation (/20)</h4>
+                            <div id="scoresQualite"></div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: var(--primary); margin-bottom: 15px;">4️⃣ Créativité & originalité (/15)</h4>
+                            <div id="scoresCreativite"></div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: var(--primary); margin-bottom: 15px;">5️⃣ Démarche collective & éducative (/10)</h4>
+                            <div id="scoresCollective"></div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: var(--primary); margin-bottom: 15px;">6️⃣ Accessibilité & inclusion (/10)</h4>
+                            <div id="scoresAccessibilite"></div>
+                        </div>
+
+                        <div class="total-score">
+                            <small>SCORE TOTAL</small>
+                            <div id="totalScore">0</div>
+                            <small>/100</small>
+                        </div>
+                    </div>
+
+                    <!-- C. CATÉGORIES -->
+                    <div class="form-section">
+                        <h3>C. REPÉRAGE DES CATÉGORIES</h3>
+                        <div class="checkbox-grid" id="categoryChecks"></div>
+                    </div>
+
+                    <!-- D. POTENTIEL COMMUNICATION -->
+                    <div class="form-section">
+                        <h3>D. POTENTIEL COMMUNICATION</h3>
+                        <div id="communicationChecks"></div>
+                    </div>
+
+                    <!-- E. SYNTHÈSE -->
+                    <div class="form-section">
+                        <h3>E. SYNTHÈSE JURY</h3>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Points forts :</label>
+                            <textarea id="pointsForts" placeholder="Indiquez les points forts du projet..."></textarea>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Points faibles :</label>
+                            <textarea id="pointsFaibles" placeholder="Indiquez les points faibles du projet..."></textarea>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">
+                                <input type="checkbox" id="coupDeCoeur" style="margin-right: 8px;">
+                                Coup de cœur académique ?
+                            </label>
+                            <textarea id="justificationCoupDeCoeur" placeholder="Justification du coup de cœur..." style="margin-top: 10px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classement Final -->
+                <div class="ranking-section card" style="margin-top: 30px;">
+                    <h2>📊 Classement Final</h2>
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Rang</th>
+                                <th>Établissement</th>
+                                <th>Support</th>
+                                <th>Catégorie</th>
+                                <th>Statut</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nouveau Projet -->
+    <div id="newProjectModal" class="modal">
+        <div class="modal-content">
+            <h2>➕ Nouveau Projet</h2>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Nom de l'établissement :</label>
+                <input type="text" id="newProjectName" placeholder="Ex: Collège Victor Hugo">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Catégorie :</label>
+                <select id="newProjectCategory" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 1em;">
+                    <option value="École élémentaire">École élémentaire</option>
+                    <option value="Collège">Collège</option>
+                    <option value="Lycée">Lycée</option>
+                    <option value="Inter-degré">Inter-degré</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Type de support :</label>
+                <select id="newProjectSupport" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 1em;">
+                    <option value="Affiche">Affiche</option>
+                    <option value="Vidéo">Vidéo</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="createProject()" style="flex: 1;">Créer</button>
+                <button class="btn" onclick="closeModal()" style="flex: 1; background: var(--border); color: var(--text);">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Structure de données
+        let projects = [];
+        let currentProjectId = null;
+
+        // Critères de conformité
+        const conformityCriteria = [
+            { id: 'bloc_visuel', label: 'Bloc visuel officiel + mention 3018 présents', general: true },
+            { id: 'logo_phare', label: 'Logo PHARE (établissements publics)', general: true },
+            { id: 'support_unique', label: 'Support unique (1 seule affiche ou 1 seule vidéo)', general: true },
+            { id: 'projet_collectif', label: 'Projet collectif d\'élèves', general: true },
+            { id: 'thematique', label: 'Thématique harcèlement clairement identifiable', general: true },
+            { id: 'valeurs_republique', label: 'Respect valeurs de la République', general: true },
+            { id: 'format_numerique', label: 'Format numérique valide (PNG/JPG/PDF – ≤5 Mo)', type: 'affiche' },
+            { id: 'slogan_lisible', label: 'Slogan lisible à 2–3 m', type: 'affiche' },
+            { id: 'imprimable_a3', label: 'Imprimable A3 sans perte', type: 'affiche' },
+            { id: 'elements_libres', label: 'Éléments graphiques libres de droits', type: 'affiche' },
+            { id: 'duree', label: 'Durée ≤ 2 minutes', type: 'video' },
+            { id: 'sous_titres', label: 'Sous-titres présents', type: 'video' },
+            { id: 'credits', label: 'Crédits artistiques finaux', type: 'video' },
+            { id: 'musiques_libres', label: 'Musiques libres de droits', type: 'video' }
+        ];
+
+        // Critères de notation
+        const scoringCriteria = {
+            pertinence: [
+                { id: 'comprehension', label: 'Compréhension immédiate du sujet', max: 5 },
+                { id: 'clarte', label: 'Clarté du message de prévention', max: 10 },
+                { id: 'notions', label: 'Présence explicite des notions victime / témoin / aide', max: 5 },
+                { id: 'adaptation', label: 'Adaptation à l\'âge du public', max: 5 }
+            ],
+            impact: [
+                { id: 'empathie', label: 'Capacité à susciter empathie / réflexion', max: 10 },
+                { id: 'memoriel', label: 'Force mémorielle (on s\'en souvient)', max: 5 },
+                { id: 'incitation', label: 'Incitation à agir / parler / alerter', max: 5 }
+            ],
+            qualite: [
+                { id: 'technique', label: 'Qualité technique globale', max: 10 },
+                { id: 'lisibilite', label: 'Lisibilité / fluidité', max: 5 },
+                { id: 'soin', label: 'Soin apporté à la production', max: 5 }
+            ],
+            creativite: [
+                { id: 'angle', label: 'Angle choisi', max: 5 },
+                { id: 'traitement', label: 'Traitement narratif ou graphique', max: 5 },
+                { id: 'risque', label: 'Prise de risque artistique', max: 5 }
+            ],
+            collective: [
+                { id: 'implication', label: 'Implication visible des élèves', max: 5 },
+                { id: 'pedagogique', label: 'Dimension pédagogique identifiable', max: 5 }
+            ],
+            accessibilite: [
+                { id: 'sous_titres_access', label: 'Sous-titres / lisibilité', max: 5 },
+                { id: 'diversite', label: 'Attention portée à la diversité des publics', max: 5 }
+            ]
+        };
+
+        // Catégories
+        const categories = [
+            { id: 'elementaire', label: 'École élémentaire' },
+            { id: 'college', label: 'Collège' },
+            { id: 'lycee', label: 'Lycée' },
+            { id: 'inter_degre', label: 'Inter-degré' }
+        ];
+
+        const specialPrizes = [
+            { id: 'cyberharcelement', label: 'Cyberharcèlement' },
+            { id: 'sexiste', label: 'Harcèlement sexiste / sexuel' },
+            { id: 'inclusion', label: 'Inclusion' }
+        ];
+
+        // Communication
+        const communicationCriteria = [
+            { id: 'national', label: 'Message transposable en campagne nationale', options: ['Oui', 'Moyen', 'Non'] },
+            { id: 'comprehensible', label: 'Compréhensible sans contexte scolaire', options: ['Oui', 'Moyen', 'Non'] },
+            { id: 'force', label: 'Force visuelle / narrative', options: ['Forte', 'Moyenne', 'Faible'] }
+        ];
+
+        // Initialisation
+        function init() {
+            loadFromLocalStorage();
+            renderProjectList();
+            updateRanking();
+            if (projects.length > 0) {
+                selectProject(projects[0].id);
+            }
+        }
+
+        // Gestion LocalStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('prixNonHarcelement', JSON.stringify(projects));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('prixNonHarcelement');
+            if (saved) {
+                projects = JSON.parse(saved);
+            }
+        }
+
+        // Modal
+        function openNewProjectModal() {
+            document.getElementById('newProjectModal').classList.add('active');
+            document.getElementById('newProjectName').value = '';
+        }
+
+        function closeModal() {
+            document.getElementById('newProjectModal').classList.remove('active');
+        }
+
+        // Créer un projet
+        function createProject() {
+            const name = document.getElementById('newProjectName').value.trim();
+            const category = document.getElementById('newProjectCategory').value;
+            const support = document.getElementById('newProjectSupport').value;
+
+            if (!name) {
+                alert('Veuillez saisir un nom d\'établissement');
+                return;
+            }
+
+            const project = {
+                id: Date.now(),
+                name: name,
+                category: category,
+                support: support,
+                conformity: {},
+                scores: {},
+                categories: {},
+                specialPrizes: {},
+                communication: {},
+                synthesis: {
+                    pointsForts: '',
+                    pointsFaibles: '',
+                    coupDeCoeur: false,
+                    justification: ''
+                }
+            };
+
+            projects.push(project);
+            saveToLocalStorage();
+            renderProjectList();
+            selectProject(project.id);
+            closeModal();
+        }
+
+        // Rendre la liste des projets
+        function renderProjectList() {
+            const list = document.getElementById('projectList');
+            list.innerHTML = '';
+
+            if (projects.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 20px 0;">Aucun projet</p>';
+                return;
+            }
+
+            projects.forEach(project => {
+                const div = document.createElement('div');
+                div.className = 'project-item' + (currentProjectId === project.id ? ' active' : '');
+                div.innerHTML = `
+                    <div onclick="selectProject(${project.id})">
+                        <strong>${project.name}</strong><br>
+                        <small style="opacity: 0.7;">${project.category}</small>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="project-score">${calculateTotalScore(project)}</span>
+                        <button class="delete-btn" onclick="deleteProject(${project.id}, event)">✕</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // Sélectionner un projet
+        function selectProject(id) {
+            currentProjectId = id;
+            const project = projects.find(p => p.id === id);
+            
+            if (!project) return;
+
+            document.getElementById('noProjectMessage').style.display = 'none';
+            document.getElementById('evaluationForm').style.display = 'block';
+
+            document.getElementById('currentProjectName').textContent = project.name;
+            document.getElementById('currentProjectCategory').textContent = project.category;
+            document.getElementById('currentProjectSupport').textContent = project.support;
+
+            renderConformityChecks(project);
+            renderScores(project);
+            renderCategoryChecks(project);
+            renderCommunicationChecks(project);
+            renderSynthesis(project);
+            updateConformityStatus(project);
+            renderProjectList();
+        }
+
+        // Conformité
+        function renderConformityChecks(project) {
+            const container = document.getElementById('conformityChecks');
+            container.innerHTML = '';
+
+            conformityCriteria.forEach(criterion => {
+                if (criterion.general || 
+                    (criterion.type === 'affiche' && project.support === 'Affiche') ||
+                    (criterion.type === 'video' && project.support === 'Vidéo')) {
+                    
+                    const div = document.createElement('div');
+                    div.className = 'checkbox-item';
+                    div.innerHTML = `
+                        <input type="checkbox" id="conf_${criterion.id}" 
+                               ${project.conformity[criterion.id] ? 'checked' : ''}
+                               onchange="updateConformity('${criterion.id}', this.checked)">
+                        <label for="conf_${criterion.id}">${criterion.label}</label>
+                    `;
+                    container.appendChild(div);
+                }
+            });
+        }
+
+        function updateConformity(criterionId, checked) {
+            const project = projects.find(p => p.id === currentProjectId);
+            project.conformity[criterionId] = checked;
+            saveToLocalStorage();
+            updateConformityStatus(project);
+            updateRanking();
+        }
+
+        function updateConformityStatus(project) {
+            const badge = document.getElementById('conformityBadge');
+            const isConforme = checkConformity(project);
+            
+            if (isConforme) {
+                badge.textContent = '✓ Conforme';
+                badge.className = 'status-badge status-conforme';
+            } else {
+                badge.textContent = '✗ Non conforme';
+                badge.className = 'status-badge status-non-conforme';
+            }
+        }
+
+        function checkConformity(project) {
+            const relevantCriteria = conformityCriteria.filter(c => 
+                c.general || 
+                (c.type === 'affiche' && project.support === 'Affiche') ||
+                (c.type === 'video' && project.support === 'Vidéo')
+            );
+
+            return relevantCriteria.every(c => project.conformity[c.id]);
+        }
+
+        // Scores
+        function renderScores(project) {
+            renderScoreSection('pertinence', 'scoresPertinence', project);
+            renderScoreSection('impact', 'scoresImpact', project);
+            renderScoreSection('qualite', 'scoresQualite', project);
+            renderScoreSection('creativite', 'scoresCreativite', project);
+            renderScoreSection('collective', 'scoresCollective', project);
+            renderScoreSection('accessibilite', 'scoresAccessibilite', project);
+            
+            updateTotalScore(project);
+        }
+
+        function renderScoreSection(section, containerId, project) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            scoringCriteria[section].forEach(criterion => {
+                const div = document.createElement('div');
+                div.className = 'score-input-group';
+                div.innerHTML = `
+                    <label>${criterion.label}</label>
+                    <input type="number" min="0" max="${criterion.max}" 
+                           value="${project.scores[criterion.id] || 0}"
+                           onchange="updateScore('${criterion.id}', this.value, ${criterion.max})">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateScore(criterionId, value, max) {
+            const project = projects.find(p => p.id === currentProjectId);
+            const numValue = Math.min(Math.max(0, parseInt(value) || 0), max);
+            project.scores[criterionId] = numValue;
+            saveToLocalStorage();
+            updateTotalScore(project);
+            renderProjectList();
+            updateRanking();
+        }
+
+        function calculateTotalScore(project) {
+            let total = 0;
+            Object.values(scoringCriteria).forEach(section => {
+                section.forEach(criterion => {
+                    total += project.scores[criterion.id] || 0;
+                });
+            });
+            return total;
+        }
+
+        function updateTotalScore(project) {
+            const total = calculateTotalScore(project);
+            document.getElementById('totalScore').textContent = total;
+        }
+
+        // Catégories
+        function renderCategoryChecks(project) {
+            const container = document.getElementById('categoryChecks');
+            container.innerHTML = '';
+
+            [...categories, ...specialPrizes].forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-item';
+                const key = cat.id;
+                div.innerHTML = `
+                    <input type="checkbox" id="cat_${key}" 
+                           ${project.categories[key] || project.specialPrizes[key] ? 'checked' : ''}
+                           onchange="updateCategory('${key}', this.checked)">
+                    <label for="cat_${key}">${cat.label}</label>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateCategory(categoryId, checked) {
+            const project = projects.find(p => p.id === currentProjectId);
+            if (categories.find(c => c.id === categoryId)) {
+                project.categories[categoryId] = checked;
+            } else {
+                project.specialPrizes[categoryId] = checked;
+            }
+            saveToLocalStorage();
+        }
+
+        // Communication
+        function renderCommunicationChecks(project) {
+            const container = document.getElementById('communicationChecks');
+            container.innerHTML = '';
+
+            communicationCriteria.forEach(criterion => {
+                const div = document.createElement('div');
+                div.className = 'score-input-group';
+                div.innerHTML = `
+                    <label>${criterion.label}</label>
+                    <select onchange="updateCommunication('${criterion.id}', this.value)"
+                            style="padding: 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 1em;">
+                        <option value="">-- Sélectionner --</option>
+                        ${criterion.options.map(opt => 
+                            `<option value="${opt}" ${project.communication[criterion.id] === opt ? 'selected' : ''}>${opt}</option>`
+                        ).join('')}
+                    </select>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateCommunication(criterionId, value) {
+            const project = projects.find(p => p.id === currentProjectId);
+            project.communication[criterionId] = value;
+            saveToLocalStorage();
+        }
+
+        // Synthèse
+        function renderSynthesis(project) {
+            document.getElementById('pointsForts').value = project.synthesis.pointsForts || '';
+            document.getElementById('pointsFaibles').value = project.synthesis.pointsFaibles || '';
+            document.getElementById('coupDeCoeur').checked = project.synthesis.coupDeCoeur || false;
+            document.getElementById('justificationCoupDeCoeur').value = project.synthesis.justification || '';
+        }
+
+        // Sauvegarder
+        function saveProject() {
+            const project = projects.find(p => p.id === currentProjectId);
+            if (!project) return;
+
+            project.synthesis.pointsForts = document.getElementById('pointsForts').value;
+            project.synthesis.pointsFaibles = document.getElementById('pointsFaibles').value;
+            project.synthesis.coupDeCoeur = document.getElementById('coupDeCoeur').checked;
+            project.synthesis.justification = document.getElementById('justificationCoupDeCoeur').value;
+
+            saveToLocalStorage();
+            alert('✓ Projet sauvegardé avec succès !');
+            updateRanking();
+        }
+
+        // Supprimer
+        function deleteProject(id, event) {
+            event.stopPropagation();
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) return;
+
+            projects = projects.filter(p => p.id !== id);
+            saveToLocalStorage();
+            
+            if (currentProjectId === id) {
+                currentProjectId = null;
+                document.getElementById('noProjectMessage').style.display = 'block';
+                document.getElementById('evaluationForm').style.display = 'none';
+            }
+            
+            renderProjectList();
+            updateRanking();
+        }
+
+        // Classement
+        function updateRanking() {
+            const tbody = document.getElementById('rankingTableBody');
+            tbody.innerHTML = '';
+
+            const sorted = [...projects].sort((a, b) => {
+                const scoreA = calculateTotalScore(a);
+                const scoreB = calculateTotalScore(b);
+                return scoreB - scoreA;
+            });
+
+            sorted.forEach((project, index) => {
+                const tr = document.createElement('tr');
+                const isConforme = checkConformity(project);
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${project.name}</td>
+                    <td>${project.support}</td>
+                    <td>${project.category}</td>
+                    <td><span class="status-badge ${isConforme ? 'status-conforme' : 'status-non-conforme'}">
+                        ${isConforme ? '✓ Conforme' : '✗ Non conforme'}
+                    </span></td>
+                    <td>${calculateTotalScore(project)}/100</td>
+                `;
+                tr.style.cursor = 'pointer';
+                tr.onclick = () => selectProject(project.id);
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Export Excel
+        function exportData() {
+            let csv = 'Rang,Établissement,Support,Catégorie,Statut,Score,Points Forts,Points Faibles,Coup de Cœur\n';
+            
+            const sorted = [...projects].sort((a, b) => calculateTotalScore(b) - calculateTotalScore(a));
+            
+            sorted.forEach((project, index) => {
+                const isConforme = checkConformity(project);
+                csv += `${index + 1},"${project.name}","${project.support}","${project.category}",`;
+                csv += `"${isConforme ? 'Conforme' : 'Non conforme'}",${calculateTotalScore(project)},`;
+                csv += `"${(project.synthesis.pointsForts || '').replace(/"/g, '""')}",`;
+                csv += `"${(project.synthesis.pointsFaibles || '').replace(/"/g, '""')}",`;
+                csv += `"${project.synthesis.coupDeCoeur ? 'Oui' : 'Non'}"\n`;
+            });
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Prix_Non_Harcelement_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // Initialisation au chargement
+        window.onload = init;
+    </script>
+</body>
+</html>
